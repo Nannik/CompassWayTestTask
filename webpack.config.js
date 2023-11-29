@@ -30,25 +30,51 @@ const buildDevServer = (mode, port) => {
     }
 }
 
+const buildOptimization = () => {
+    return {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                test: /\.js(\?.*)?$/i,
+            }),
+        ],
+    };
+}
+
+const buildResolvers = () => {
+    return {
+        extensions: ['.tsx', '.ts', '.js'],
+    }
+}
+
+const buildLoaders = () => {
+    const tsLoader = {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+    };
+
+    return [
+        tsLoader
+    ];
+}
+
 module.exports = (env, argv) => {
     const mode = argv.mode === 'development' ? 'development' : 'production';
     const port = env.port ?? 3000;
 
     return {
-        entry: './src/index.js',
+        entry: './src/index.ts',
         output: {
             filename: '[name].[contenthash].bundle.js',
             path: paths.dist,
             clean: true
         },
-        optimization: {
-            minimize: true,
-            minimizer: [
-                new TerserPlugin({
-                    test: /\.js(\?.*)?$/i,
-                }),
-            ],
+        module: {
+            rules: buildLoaders(),
         },
+        optimization: buildOptimization(),
+        resolve: buildResolvers(),
         plugins: buildPlugins(mode),
         devServer: buildDevServer(mode, port),
         devtool: 'source-map',

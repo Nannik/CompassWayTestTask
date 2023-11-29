@@ -26,6 +26,9 @@ const buildDevServer = (mode, port) => {
         },
         compress: true,
         open: true,
+        client: {
+            logging: 'none'
+        },
         port,
     }
 }

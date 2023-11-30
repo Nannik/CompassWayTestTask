@@ -35,6 +35,7 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'error',
         'no-unused-vars': 'warn',
         'react/jsx-props-no-spreading': 'warn',
+        'react/jsx-one-expression-per-line': 'off',
         'no-plusplus': 'off',
         'import/prefer-default-export': 'off',
         'import/no-unresolved': 'off',

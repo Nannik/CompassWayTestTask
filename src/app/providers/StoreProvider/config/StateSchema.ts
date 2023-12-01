@@ -7,12 +7,14 @@ import { NavigateOptions } from 'react-router/dist/lib/context';
 import { UserSchema } from '@/entity/User';
 import { LoginSchema } from '@/features/AuthByUserName';
 import { RegistrationSchema } from '@/features/Registration';
+import { SendEmailFormSchema } from '@/features/SendEmail';
 
 export interface StateSchema {
     user: UserSchema
 
     loginForm?: LoginSchema
     registrationForm?: RegistrationSchema
+    sendEmailForm?: SendEmailFormSchema
 }
 
 export type StateSchemaKey = keyof StateSchema;

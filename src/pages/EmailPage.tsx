@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getUserAuthData, userActions } from '@/entity/User';
+import { EmailList } from '@/widgets/EmailList';
 
 const EmailPage = () => {
     const dispatch = useAppDispatch();
@@ -28,6 +29,10 @@ const EmailPage = () => {
             <Form.Text>
                 Email: {userData.email}
             </Form.Text>
+
+            <br />
+
+            <EmailList />
         </div>
     );
 };

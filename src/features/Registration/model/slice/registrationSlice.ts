@@ -23,9 +23,6 @@ const registrationSlice = createSlice({
         setEmail: (state, action: PayloadAction<string>) => {
             state.email = action.payload;
         },
-        setError: (state, action: PayloadAction<string>) => {
-            state.error = action.payload;
-        },
     },
     extraReducers: (builder) => {
         builder

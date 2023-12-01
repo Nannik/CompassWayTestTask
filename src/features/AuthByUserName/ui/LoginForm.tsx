@@ -50,7 +50,6 @@ const LoginForm = memo((props: LoginFormProps) => {
 
     return (
         <div
-            data-testid="login-form"
             className={ classNames(className) }
         >
             <Form.Text> Authorization form </Form.Text>

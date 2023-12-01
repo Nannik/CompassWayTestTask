@@ -9,6 +9,7 @@ import { createReducerManager } from '@/app/providers/StoreProvider/config/reduc
 import { $api } from '@/shared/api/api';
 import { loginReducer } from '@/features/AuthByUserName/model/slice/loginSlice';
 import { registrationReducer } from '@/features/Registration/model/slice/registrationSlice';
+import { sendEmailReducer } from '@/features/SendEmail/model/slice/sendEmailFormSlice';
 
 export const createReduxStore = (
     initialState?: StateSchema,
@@ -20,6 +21,7 @@ export const createReduxStore = (
         user: userReducer,
         loginForm: loginReducer,
         registrationForm: registrationReducer,
+        sendEmailForm: sendEmailReducer,
     };
 
     const reducerManager = createReducerManager(rootReducers);

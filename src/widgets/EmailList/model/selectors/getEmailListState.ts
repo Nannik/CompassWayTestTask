@@ -1,3 +1,3 @@
-import { EmailListSchema } from '@/widgets/EmailList/model/types/EmailListSchema';
+import { StateSchema } from '@/app/providers/StoreProvider';
 
-export const getEmailListState = (state: EmailListSchema) => state?.emails;
+export const getEmailListState = (state: StateSchema) => state.emailsList;

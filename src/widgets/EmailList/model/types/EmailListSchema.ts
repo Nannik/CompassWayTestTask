@@ -1,5 +1,9 @@
-import { Email } from 'src/features/SendEmail';
+import { Email } from '@/entity/Email';
 
 export interface EmailListSchema {
-    emails: Email[]
+    emails?: Email[]
+    isLoading?: boolean
+    error?: string
+    count?: number
+    currentPage?: number
 }

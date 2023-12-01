@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Email } from 'src/features/SendEmail';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { LocalStorageKeys } from '@/shared/const/localStorageKeys';
+import { Email } from '@/entity/Email';
 
 interface SendEmailProps {
     senderId: number

@@ -60,8 +60,6 @@ const LoginForm = memo((props: LoginFormProps) => {
                 <InputGroup.Text id="basic-addon1">Username</InputGroup.Text>
                 <Form.Control
                     placeholder="Username"
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
                     type="text"
                     onChange={ onUsernameChange }
                 />
@@ -71,8 +69,6 @@ const LoginForm = memo((props: LoginFormProps) => {
                 <InputGroup.Text id="basic-addon2">Password</InputGroup.Text>
                 <Form.Control
                     type="password"
-                    aria-label="Username"
-                    aria-describedby="basic-addon2"
                     onChange={ onPasswordChange }
                     placeholder="Password"
                 />

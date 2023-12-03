@@ -1,76 +1,65 @@
-import React, { memo, useCallback } from 'react';
-import { Form, Spinner } from 'react-bootstrap';
+import React, { memo } from 'react';
+import {
+    Col, Form, Row, Spinner,
+    Accordion,
+} from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import parse from 'html-react-parser';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { SendEmailForm } from '@/features/SendEmail';
 import { getEmailListEmails } from '../model/selectors/getEmailListEmails';
 import { getEmailListIsLoading } from '../model/selectors/getEmailListIsLoading';
 import { getEmailListError } from '../model/selectors/getEmailListError';
 import { EmailListPager } from '@/widgets/EmailList/ui/EmailListPager';
-import { fetchEmails } from '@/widgets/EmailList/model/services/fetchEmails';
-import { EMAIL_LIST_LIMIT } from '@/widgets/EmailList/model/const/constVariables';
-import { getEmailListPage } from '@/widgets/EmailList/model/selectors/getEmailListPage';
+import Email from '@/widgets/EmailList/ui/Email';
 
 export const EmailList = memo(() => {
-    const dispatch = useAppDispatch();
-
     const emails = useSelector(getEmailListEmails);
     const isLoading = useSelector(getEmailListIsLoading);
     const error = useSelector(getEmailListError);
-    const page = useSelector(getEmailListPage);
-
-    const onEmailSent = useCallback(() => {
-        dispatch(fetchEmails({
-            limit: EMAIL_LIST_LIMIT,
-            offset: page * EMAIL_LIST_LIMIT,
-        }));
-    }, [ dispatch, page ]);
 
     const bodyBlock = isLoading ? (
         <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
         </Spinner>
-    ) : emails.map((email) => (
-        <div key={ email.id }>
-            <Form.Text>
-                Recipient: {email.recipient}
-            </Form.Text>
-
-            <br />
-
-            <Form.Text>
-                Subject: {email.subject}
-            </Form.Text>
-
-            <br />
-
-            <Form.Text>
-                Message:<br />
-                {parse(email.message)}
-            </Form.Text>
-
-            <hr />
-        </div>
-    ));
+    ) : (
+        <Accordion>
+            {emails.map((email) => (
+                <Email
+                    key={ email.id }
+                    itemKey={ email.id.toString() }
+                    recipient={ email.recipient }
+                    subject={ email.subject }
+                    message={ email.message }
+                />
+            ))}
+        </Accordion>
+    );
 
     return (
-        <div>
-            <SendEmailForm
-                onSuccess={ onEmailSent }
-            />
-
-            <hr />
-
-            <EmailListPager />
-
-            { error && (
-                <Form.Text>
-                    {error}
+        <>
+            <Row className="mb-4">
+                <Form.Text
+                    className="fs-4"
+                >
+                    Emails list
                 </Form.Text>
-            ) }
+            </Row>
 
-            { bodyBlock }
-        </div>
+            <Row className="mb-4 justify-content-center">
+                <Col className="d-flex justify-content-center">
+                    <EmailListPager />
+                </Col>
+            </Row>
+
+            <Row className="mb-4 justify-content-center">
+                { error && (
+                    <Form.Text>
+                        {error}
+                    </Form.Text>
+                ) }
+            </Row>
+
+            <Row className="mb-4 justify-content-center">
+                { bodyBlock }
+            </Row>
+        </>
     );
 });

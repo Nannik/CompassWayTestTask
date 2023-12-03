@@ -33,10 +33,11 @@ export const EmailListPager = () => {
     }, [ dispatch, page ]);
 
     return (
-        <div>
+        <div className="w-fit-content">
             <Button
                 disabled={ page - 1 < 0 }
                 onClick={ handlePrevPageClick }
+                className="me-2"
             >
                 &lt;
             </Button>
@@ -46,6 +47,7 @@ export const EmailListPager = () => {
             <Button
                 disabled={ (page + 1 >= Math.ceil(count / EMAIL_LIST_LIMIT)) }
                 onClick={ handleNextPageClick }
+                className="ms-2"
             >
                 &gt;
             </Button>

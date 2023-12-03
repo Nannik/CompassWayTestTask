@@ -2,12 +2,12 @@ import React, {
     ChangeEvent, memo, useCallback, useRef,
 } from 'react';
 import { useSelector } from 'react-redux';
-import classNames from 'classnames';
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { convertToRaw, EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
+import Form from 'react-bootstrap/Form';
+import { InputGroup } from 'react-bootstrap';
+import { Editor } from 'react-draft-wysiwyg';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getSendEmailFormIsLoading } from '../model/selectors/getSendEmailFormIsLoading';
 import { getSendEmailFormError } from '../model/selectors/getSendEmailFormError';
@@ -17,15 +17,18 @@ import { getSendEmailFormRecipient } from '@/features/SendEmail/model/selectors/
 import { getSendEmailFormSubject } from '@/features/SendEmail/model/selectors/getSendEmailFormSubject';
 import { getSendEmailFormMessage } from '@/features/SendEmail/model/selectors/getSendEmailFormMessage';
 import { sendEmail } from '@/features/SendEmail/model/services/sendEmail';
+import { Modal } from '@/shared/ui/Modal/Modal';
 
 interface SendEmailFormProps {
-    className?: string
+    show: boolean
     onSuccess?: () => void
+    onHide: () => void
 }
 
 export const SendEmailForm = memo((props: SendEmailFormProps) => {
     const {
-        className,
+        show,
+        onHide,
         onSuccess,
     } = props;
 
@@ -81,36 +84,58 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
         }
     }, [ onSuccess, dispatch, sender, recipientEmail, subject, message ]);
 
-    return (
-        <div
-            className={ classNames(className) }
+    const modalFooterButton = (
+        <Button
+            variant="primary"
+            onClick={ onSubmit }
+            disabled={ isLoading }
+            type="submit"
         >
+            Send Email
+        </Button>
+    );
 
+    return (
+        <Modal
+            onHide={ onHide }
+            show={ show }
+            footer={ modalFooterButton }
+            title="Send email"
+        >
             {error && (
-                <div>
-                    <Form.Text className={ classNames('text-danger') }>
-                        {error}
-                    </Form.Text>
-                </div>
+                <Form.Text className="text-danger fs-6">
+                    {error}
+                </Form.Text>
             )}
 
-            <Form.Text>Sender: {sender.email}</Form.Text>
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Sender</InputGroup.Text>
+                <Form.Control
+                    type="text"
+                    value={ sender.email }
+                    disabled
+                />
+            </InputGroup>
 
-            <Form.Control
-                type="text"
-                onChange={ onRecipientChange }
-                ref={ recipientRef }
-                placeholder="Recipient"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Recipient</InputGroup.Text>
+                <Form.Control
+                    type="text"
+                    placeholder="Recipient"
+                    onChange={ onRecipientChange }
+                    ref={ recipientRef }
+                />
+            </InputGroup>
 
-            <Form.Control
-                type="text"
-                onChange={ onSubjectChange }
-                ref={ subjectRef }
-                placeholder="Subject"
-            />
-
-            <hr />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Subject</InputGroup.Text>
+                <Form.Control
+                    type="text"
+                    placeholder="Subject"
+                    onChange={ onSubjectChange }
+                    ref={ subjectRef }
+                />
+            </InputGroup>
 
             <Editor
                 editorState={ editorState }
@@ -119,17 +144,6 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
                 editorClassName="editorClassName"
                 onEditorStateChange={ onMessageChange }
             />
-
-            <hr />
-
-            <Button
-                variant="primary"
-                onClick={ onSubmit }
-                disabled={ isLoading }
-                type="submit"
-            >
-                Send Email
-            </Button>
-        </div>
+        </Modal>
     );
 });

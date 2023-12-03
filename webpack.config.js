@@ -10,12 +10,13 @@ const paths = {
     html: path.resolve(__dirname, 'public', 'index.html'),
 };
 
-const buildPlugins = (mode, apiUrl) => [
+const buildPlugins = (mode, apiUrl, baseName) => [
     new HtmlWebpackPlugin({
         template: paths.html,
     }),
     new webpack.DefinePlugin({
         __API__: JSON.stringify(apiUrl),
+        __BASE_NAME__: JSON.stringify(baseName),
     }),
     new webpack.ProgressPlugin(),
 ];
@@ -71,7 +72,8 @@ const buildLoaders = () => {
 module.exports = (env, argv) => {
     const mode = argv.mode === 'development' ? 'development' : 'production';
     const port = env.port ?? 3000;
-    const apiUrl = env.apiUrl || 'http://68.183.74.14:4005/api/';
+    const apiUrl = env.apiUrl || 'https://68.183.74.14:4005/api/';
+    const baseName = env.baseName || '/';
 
     return {
         entry: './src/index.tsx',
@@ -85,7 +87,7 @@ module.exports = (env, argv) => {
         },
         optimization: buildOptimization(),
         resolve: buildResolvers(),
-        plugins: buildPlugins(mode, apiUrl),
+        plugins: buildPlugins(mode, apiUrl, baseName),
         devServer: buildDevServer(mode, port),
         devtool: 'source-map',
         mode,

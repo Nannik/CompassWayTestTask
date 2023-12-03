@@ -1,6 +1,5 @@
 import { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { getUserMounted, userActions } from '@/entity/User';
 import { AppRouter } from '@/app/router';
 
@@ -13,7 +12,7 @@ const App = () => {
     }, [ dispatch ]);
 
     return (
-        <div className={ classNames('app') }>
+        <div>
             <Suspense fallback="">
                 <div className="app-content">
                     <div className="page-content">

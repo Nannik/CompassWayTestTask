@@ -29,6 +29,7 @@ module.exports = {
         'react/jsx-indent-props': [ 2, 4 ],
         'max-len': [ 2, { code: 120, ignoreComments: true } ],
         'no-console': [ 'warn', { allow: [ 'warn', 'error' ] } ],
+        'linebreak-style': [ 'error', 'windows' ],
         'object-curly-spacing': [ 'error', 'always' ],
         'array-bracket-spacing': [ 'error', 'always' ],
         'unused-imports/no-unused-imports': 'error',

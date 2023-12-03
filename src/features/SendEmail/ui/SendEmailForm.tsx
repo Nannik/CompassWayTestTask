@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { convertToRaw, EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getSendEmailFormIsLoading } from '../model/selectors/getSendEmailFormIsLoading';
 import { getSendEmailFormError } from '../model/selectors/getSendEmailFormError';
@@ -26,9 +29,12 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
         onSuccess,
     } = props;
 
+    const [ editorState, setEditorState ] = React.useState<EditorState>(
+        () => EditorState.createEmpty(),
+    );
+
     const recipientRef = useRef<HTMLInputElement>();
     const subjectRef = useRef<HTMLInputElement>();
-    const messageRef = useRef<HTMLInputElement>();
 
     const sender = useSelector(getUserAuthData);
     const recipientEmail = useSelector(getSendEmailFormRecipient);
@@ -49,10 +55,15 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
         dispatch(sendEmailActions.setSubject(value));
     }, [ dispatch ]);
 
-    const onMessageChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        dispatch(sendEmailActions.setMessage(value));
-    }, [ dispatch ]);
+    const onMessageChange = useCallback((newEditorState: EditorState) => {
+        setEditorState(newEditorState);
+
+        const content = newEditorState.getCurrentContent();
+        const raw = convertToRaw(content);
+        const html = draftToHtml(raw);
+
+        dispatch(sendEmailActions.setMessage(html));
+    }, [ dispatch, setEditorState ]);
 
     const onSubmit = useCallback(async () => {
         const res = await dispatch(sendEmail({
@@ -66,7 +77,7 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
 
             recipientRef.current.value = '';
             subjectRef.current.value = '';
-            messageRef.current.value = '';
+            setEditorState(EditorState.createEmpty());
         }
     }, [ onSuccess, dispatch, sender, recipientEmail, subject, message ]);
 
@@ -99,12 +110,17 @@ export const SendEmailForm = memo((props: SendEmailFormProps) => {
                 placeholder="Subject"
             />
 
-            <Form.Control
-                type="text"
-                onChange={ onMessageChange }
-                ref={ messageRef }
-                placeholder="Message"
+            <hr />
+
+            <Editor
+                editorState={ editorState }
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={ onMessageChange }
             />
+
+            <hr />
 
             <Button
                 variant="primary"

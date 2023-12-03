@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import parse from 'html-react-parser';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { SendEmailForm } from '@/features/SendEmail';
 import { getEmailListEmails } from '../model/selectors/getEmailListEmails';
@@ -33,16 +34,23 @@ export const EmailList = memo(() => {
     ) : emails.map((email) => (
         <div key={ email.id }>
             <Form.Text>
-                {email.recipient}
+                Recipient: {email.recipient}
             </Form.Text>
 
-            <Form.Text>
-                {email.subject}
-            </Form.Text>
+            <br />
 
             <Form.Text>
-                {email.message}
+                Subject: {email.subject}
             </Form.Text>
+
+            <br />
+
+            <Form.Text>
+                Message:<br />
+                {parse(email.message)}
+            </Form.Text>
+
+            <hr />
         </div>
     ));
 

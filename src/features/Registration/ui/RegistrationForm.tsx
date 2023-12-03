@@ -2,9 +2,9 @@ import {
     ChangeEvent, memo, useCallback,
 } from 'react';
 import { useSelector } from 'react-redux';
-import classNames from 'classnames';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { InputGroup, Row } from 'react-bootstrap';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { registrationActions } from '../model/slice/registrationSlice';
 import { registration } from '../model/services/registration';
@@ -15,13 +15,11 @@ import { getRegistrationLoading } from '../model/selectors/getRegistrationLoadin
 import { getRegistrationEmail } from '@/features/Registration/model/selectors/getRegistrationEmail';
 
 interface LoginFormProps {
-    className?: string
     onSuccess?: () => void
 }
 
 const RegistrationForm = memo((props: LoginFormProps) => {
     const {
-        className,
         onSuccess,
     } = props;
 
@@ -56,34 +54,47 @@ const RegistrationForm = memo((props: LoginFormProps) => {
     }, [ onSuccess, dispatch, password, username, email ]);
 
     return (
-        <div
-            className={ classNames(className) }
-        >
-            <Form.Text> Registration form </Form.Text>
+        <Row className="justify-content-center">
+            <Form.Text className="fs-4 mb-2"> Registration form </Form.Text>
 
             {error && (
-                <Form.Text className={ classNames('text-danger') }>
+                <Form.Text className="fs-6 mb-2 text-danger">
                     {error}
                 </Form.Text>
             )}
 
-            <Form.Control
-                type="text"
-                onChange={ onUsernameChange }
-                placeholder="Username"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Username</InputGroup.Text>
+                <Form.Control
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    type="text"
+                    onChange={ onUsernameChange }
+                />
+            </InputGroup>
 
-            <Form.Control
-                type="password"
-                onChange={ onPasswordChange }
-                placeholder="Password"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon2">Password</InputGroup.Text>
+                <Form.Control
+                    type="password"
+                    aria-label="Username"
+                    aria-describedby="basic-addon2"
+                    onChange={ onPasswordChange }
+                    placeholder="Password"
+                />
+            </InputGroup>
 
-            <Form.Control
-                type="email"
-                onChange={ onEmailChange }
-                placeholder="Email"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon2">Email</InputGroup.Text>
+                <Form.Control
+                    type="email"
+                    aria-label="Username"
+                    aria-describedby="basic-addon2"
+                    onChange={ onEmailChange }
+                    placeholder="Email"
+                />
+            </InputGroup>
 
             <Button
                 variant="primary"
@@ -91,9 +102,9 @@ const RegistrationForm = memo((props: LoginFormProps) => {
                 disabled={ isLoading }
                 type="submit"
             >
-                Registration
+                Log in
             </Button>
-        </div>
+        </Row>
     );
 });
 

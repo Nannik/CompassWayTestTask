@@ -2,9 +2,9 @@ import {
     ChangeEvent, memo, useCallback,
 } from 'react';
 import { useSelector } from 'react-redux';
-import classNames from 'classnames';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import {
+    Row, Form, Button, InputGroup,
+} from 'react-bootstrap';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { loginActions } from '../model/slice/loginSlice';
 import { loginByUsername } from '../model/services/loginByUsername';
@@ -14,13 +14,11 @@ import { getLoginError } from '../model/selectors/getLoginError';
 import { getLoginLoading } from '../model/selectors/getLoginLoading';
 
 interface LoginFormProps {
-    className?: string
     onSuccess?: () => void
 }
 
 const LoginForm = memo((props: LoginFormProps) => {
     const {
-        className,
         onSuccess,
     } = props;
 
@@ -49,28 +47,36 @@ const LoginForm = memo((props: LoginFormProps) => {
     }, [ onSuccess, dispatch, password, username ]);
 
     return (
-        <div
-            className={ classNames(className) }
-        >
-            <Form.Text> Authorization form </Form.Text>
+        <Row className="justify-content-center">
+            <Form.Text className="fs-4 mb-2"> Authorization form </Form.Text>
 
             {error && (
-                <Form.Text className={ classNames('text-danger') }>
+                <Form.Text className="fs-6 mb-2 text-danger">
                     {error}
                 </Form.Text>
             )}
 
-            <Form.Control
-                type="text"
-                onChange={ onUsernameChange }
-                placeholder="Username"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Username</InputGroup.Text>
+                <Form.Control
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    type="text"
+                    onChange={ onUsernameChange }
+                />
+            </InputGroup>
 
-            <Form.Control
-                type="password"
-                onChange={ onPasswordChange }
-                placeholder="Password"
-            />
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon2">Password</InputGroup.Text>
+                <Form.Control
+                    type="password"
+                    aria-label="Username"
+                    aria-describedby="basic-addon2"
+                    onChange={ onPasswordChange }
+                    placeholder="Password"
+                />
+            </InputGroup>
 
             <Button
                 variant="primary"
@@ -80,7 +86,7 @@ const LoginForm = memo((props: LoginFormProps) => {
             >
                 Log in
             </Button>
-        </div>
+        </Row>
     );
 });
 

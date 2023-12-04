@@ -72,7 +72,7 @@ const buildLoaders = () => {
 module.exports = (env, argv) => {
     const mode = argv.mode === 'development' ? 'development' : 'production';
     const port = env.port ?? 3000;
-    const apiUrl = env.apiUrl || 'https://68.183.74.14:4005/api/';
+    const apiUrl = env.apiUrl || 'http://68.183.74.14:4005/api/';
     const baseName = env.baseName || '/';
 
     return {

@@ -2,22 +2,32 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const paths = {
     src: path.resolve(__dirname, 'src'),
     dist: path.resolve(__dirname, 'dist'),
     public: path.resolve(__dirname, 'public'),
     html: path.resolve(__dirname, 'public', 'index.html'),
+    notFoundHtml: path.resolve(__dirname, 'public', '404.html'),
 };
 
 const buildPlugins = (mode, apiUrl, baseName) => [
     new HtmlWebpackPlugin({
         template: paths.html,
     }),
+
+    new CopyPlugin({
+        patterns: [
+            { from: paths.notFoundHtml, to: paths.dist },
+        ],
+    }),
+
     new webpack.DefinePlugin({
         __API__: JSON.stringify(apiUrl),
         __BASE_NAME__: JSON.stringify(baseName),
     }),
+
     new webpack.ProgressPlugin(),
 ];
 
